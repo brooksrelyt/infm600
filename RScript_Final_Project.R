@@ -93,6 +93,16 @@ cbind(mdccsize.freq)
 
 # Create a pie chart of the college sizes in Maryland
 pie(mdccsize.freq, col=colors)
+
+# Plot In-state Tuition against Out-Of-State Tuition in Maryland
+plot(as.numeric(as.character(mddata$TUITIONFEE_OUT)), as.numeric(as.character(mddata$TUITIONFEE_IN)))
+
+# Plot in-state tuition against median debt of students who graduate in Maryland
+plot(as.numeric(as.character(mddata$TUITIONFEE_IN)), as.numeric(as.character(mddata$GRAD_DEBT_MDN_SUPP)))
+
+# plot in-state tuition against mean earning of students who graduate in Maryland
+plot(as.numeric(as.character(mddata$TUITIONFEE_IN)), as.numeric(as.character(mddata$MN_EARN_WNE_P10)))
+
 # (RET_FT_COMBINE, which is a combination of RET_FT4, RET_FTL4) First-time, full-time student retention rate 
 RET_FT_COMBINE <- as.numeric((as.character(df$RET_FT_COMBINE)))
 
