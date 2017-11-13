@@ -71,6 +71,12 @@ sd(c_tuitout,na.rm=TRUE)
 # Histogram of out-of-state tuition and fees of full-time, first-time students of collges within the States
 hist(c_tuitout)
 
+# Mean of median debt of graduates by State
+tapply(as.numeric(as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE)
+
+# Barplot the mean of the median debt of graduates by State
+barplot(tapply(as.numeric(as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE),col=colors)
+
 # Create a child data set for Maryland
 mdstate = state == "Maryland"
 mddata = SuperScoreData[mdstate,]
