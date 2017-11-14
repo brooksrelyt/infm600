@@ -1,4 +1,6 @@
-# Read and view the College Scorecard raw data of colleges with Mid East Region and Virginia
+# Use getwd() to find the R working directory
+# Copy College_ScoreCard_Raw_Date_v5.csv into the working directory
+# Read and view the College Scorecard raw data of colleges within Mid East Region and Virginia
 CollegeScoreCard<-read.csv("College_ScoreCard_Raw_Data_v5.csv",header = TRUE)
 View(CollegeScoreCard)
 
@@ -102,6 +104,7 @@ plot(as.numeric(as.character(mddata$TUITIONFEE_IN)), as.numeric(as.character(mdd
 
 # plot in-state tuition against mean earning of students who graduate in Maryland
 plot(as.numeric(as.character(mddata$TUITIONFEE_IN)), as.numeric(as.character(mddata$MN_EARN_WNE_P10)))
+
 
 # (RET_FT_COMBINE, which is a combination of RET_FT4, RET_FTL4) First-time, full-time student retention rate 
 RET_FT_COMBINE <- as.numeric((as.character(df$RET_FT_COMBINE)))
