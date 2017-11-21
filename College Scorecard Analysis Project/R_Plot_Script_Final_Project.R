@@ -125,10 +125,10 @@ barplot(States_Data_freq, col=colors);
 barplot(tapply(as.numeric((as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP))), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of the grad debt by states within the region", ylab="Mean of Grad Debt",col=colors)
 
 #Barplot the mean of in-state tuition by states within the region
-barplot(tapply(as.numeric(as.character(SuperScoreData$TUITIONFEE_IN)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of In-State Tuition by States within the Region", xlab="Mean of In-State Tuition", col=colors)
+barplot(tapply(as.numeric(as.character(SuperScoreData$TUITIONFEE_IN)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of In-State Tuition by States within the Region", ylab="Mean of In-State Tuition", col=colors)
 
 #Barplot the mean of out-of-state tuition by states within the region
-barplot(tapply(as.numeric(as.character(SuperScoreData$TUITIONFEE_OUT)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of Out-Of-State Tuition by States within the Region", xlab="Mean of Out-Of-State Tuition", col=colors)
+barplot(tapply(as.numeric(as.character(SuperScoreData$TUITIONFEE_OUT)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of Out-Of-State Tuition by States within the Region", ylab="Mean of Out-Of-State Tuition", col=colors)
 
 #run these if you do not have the packages installed
 #they will be useful for ggplot2 graphs
