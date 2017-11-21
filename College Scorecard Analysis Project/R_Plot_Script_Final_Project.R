@@ -84,7 +84,7 @@ hist(PFTFAC_Data, breaks=40,main="Histogram of Proportion of Full-time Faculty S
 RET_Data <- as.numeric(as.character(SuperScoreData$RET_COMBINE));
 RET_Mean <- mean(RET_Data, na.rm=TRUE);
 RET_SD <- sd(RET_Data, na.rm=TRUE);
-hist(RET_Data, breaks=40, main="Histogram of Part-time Completion Rate",xlab"First-time, Part-time Completion Rate");
+hist(RET_Data, breaks=40, main="Histogram of Part-time Completion Rate",xlab="First-time, Part-time Completion Rate");
 
 #Find mean, standard deviation, and plot a histogram for WDRAW_ORIG_YR3_RT
 WDRAW_Data <- as.numeric(as.character(SuperScoreData$WDRAW_ORIG_YR3_RT));
