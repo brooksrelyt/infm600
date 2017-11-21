@@ -1,0 +1,96 @@
+---
+title: "Yvonne Roberts R Notebook"
+output:
+  word_document: default
+  pdf_document: default
+  html_notebook: default
+---
+```{r}
+# Use getwd() to find the R working directory
+# Copy College_ScoreCard_Raw_Date_v5.csv into the working directory
+# Read and view the College Scorecard raw data of colleges within Mid East Region and Virginia
+CollegeScoreCard<-read.csv("College_ScoreCard_Raw_Data_v5.csv",header = TRUE);
+View(CollegeScoreCard);
+```
+```{r}
+SuperScoreData <- CollegeScoreCard[c(1,15,19,13,25,101,102,107,111,132,135,138,139,151,159,165)];
+View(SuperScoreData);
+```
+
+
+
+```{r}
+#Find mean, standard deviation, and plot a histogram for GRAD_DEBT_MDN_SUPP
+GRAD_DEBT_Data <- as.numeric(as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP));
+GRAD_DEBT_Mean <- mean(GRAD_DEBT_Data, na.rm=TRUE);
+GRAD_DEBT_SD <- sd(GRAD_DEBT_Data, na.rm=TRUE);
+hist(GRAD_DEBT_Data, breaks=40, main="Histogram of Median Debt of Graduates", xlab="Median Debt of Graduates");
+```
+```{r}
+#Find mean, standard deviation, and plot a histogram for TUITIONFEE_IN
+TUIT_IN_Data <- as.numeric(as.character(SuperScoreData$TUITIONFEE_IN));
+TUIT_IN_Mean <- mean(TUIT_IN_Data, na.rm=TRUE);
+TUIT_IN_SD <- sd(TUIT_IN_Data, na.rm=TRUE);
+hist(TUIT_IN_Data, breaks=40, main="Histogram of In-State Tuition",xlab="In-State Tuition");
+```
+
+```{r}
+#Find mean, standard deviation, and plot a histogram for TUITIONFEE_OUT
+TUIT_OUT_Data <- as.numeric(as.character(SuperScoreData$TUITIONFEE_OUT));
+TUIT_OUT_Mean <- mean(TUIT_OUT_Data, na.rm=TRUE);
+TUIT_OUT_SD <- sd(TUIT_OUT_Data, na.rm=TRUE);
+hist(TUIT_OUT_Data, breaks=40,main="Histogram of Out-Of-State Tuition", xlab="Out-Of-State Tuition");
+```
+
+```{r}
+#State Distribution of the schools in our dataset
+States_Data = SuperScoreData$ST_FIPS_DESC;
+States_Data_freq = table(States_Data);
+colors = c("red","yellow","green","violet","orange","blue","pink","cyan");
+barplot(States_Data_freq, col=colors);
+```
+
+```{r}
+# Frequency distribution of the college sizes in Maryland
+mdstate = States_Data == "Maryland";
+mddata = SuperScoreData[mdstate,];
+mdccsize = mddata$CCSIZE_DESC;
+mdccsize.freq = table(mdccsize);
+cbind(mdccsize.freq);
+pie(mdccsize.freq, col=colors);
+```
+
+```{r}
+# Plot In-state Tuition against Out-Of-State Tuition in Maryland
+plot(as.numeric(as.character(mddata$TUITIONFEE_OUT)), as.numeric(as.character(mddata$TUITIONFEE_IN)),main="Maryland Tuition Comparison", xlab="Out-Of-State Tuition", ylab="In-State Tution")
+```
+
+```{r}
+# Plot in-state tuition against median debt of graduates in Maryland
+plot(as.numeric(as.character(mddata$TUITIONFEE_IN)), as.numeric(as.character(mddata$GRAD_DEBT_MDN_SUPP)),main="Maryland In-State Tuition vs Median Debt of Graduates", xlab="In-State Tuition",ylab="Median Debt of Graduates")
+```
+
+```{r}
+# plot in-state tuition against mean earning of graduates in Maryland
+plot(as.numeric(as.character(mddata$TUITIONFEE_IN)), as.numeric(as.character(mddata$MN_EARN_WNE_P10)), main="Maryland In-State Tuition vs Mean Earning of Graduates", xlab="In-State-Tuition",ylab="Mean Earning of Graduates")
+```
+
+```{r}
+# range of overall graduates median debt
+range(as.numeric(as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP)),na.rm=TRUE)
+# mean of overall graduates median debt
+mean(as.numeric(as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP)),na.rm=TRUE)
+# percentage of graduates with more $20000 in debt
+pnorm(20000, mean=GRAD_DEBT_Mean, sd=GRAD_DEBT_SD, lower.tail = FALSE)
+```
+
+
+```{r}
+# range of overall in-state tuition
+range(as.numeric(as.character(SuperScoreData$TUITIONFEE_IN)),na.rm=TRUE)
+# mean of overall in-state tuition
+mean(as.numeric(as.character(SuperScoreData$TUITIONFEE_IN)),na.rm=TRUE)
+# percentage of in-state tuition more than $20000
+pnorm(20000, mean=TUIT_IN_Mean, sd=TUIT_IN_SD, lower.tail = FALSE)
+```
+
