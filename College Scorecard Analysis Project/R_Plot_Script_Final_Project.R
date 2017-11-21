@@ -90,7 +90,7 @@ hist(RET_Data, breaks=40, main="Histogram of Part-time Completion Rate",xlab="Fi
 WDRAW_Data <- as.numeric(as.character(SuperScoreData$WDRAW_ORIG_YR3_RT));
 WDRAW_Mean <- mean(WDRAW_Data, na.rm=TRUE);
 WDRAW_SD <- sd(WDRAW_Data, na.rm=TRUE);
-hist(WDRAW_Data, breaks=40), main="Histogram of percent withdrawn from orig inst within 3yrs",xlab="Percent Withdrawn from orig inst within 3yrs");
+hist(WDRAW_Data, breaks=40, main="Histogram of percent withdrawn from orig inst within 3yrs",xlab="Percent Withdrawn from orig inst within 3yrs");
 
 
 #Next, we will find the Z-Scores for each of the above variables, which will help us to form the "SuperScores"
