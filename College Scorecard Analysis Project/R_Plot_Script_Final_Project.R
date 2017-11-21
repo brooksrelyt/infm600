@@ -4,6 +4,22 @@
 CollegeScoreCard<-read.csv("College_ScoreCard_Raw_Data_v5.csv",header = TRUE);
 View(CollegeScoreCard);
 
+#run these if you do not have the packages installed
+#they will be useful for ggplot2 graphs
+install.packages("ggplot2");
+install.packages("Hmisc");
+install.packages("dplyr");
+install.packages("reshape");
+install.packages("lme4");
+#load libraries into R session
+library(ggplot2);
+library(Hmisc);
+library(dplyr);
+library(reshape);
+library(lme4);
+library(nlme);
+theme_set(theme_grey(base_size = 12));
+
 #Create manageable data subset of the columns that will be used to form our two "SuperScores".
 
 # "Financial Stability" SuperScore
@@ -81,17 +97,16 @@ PFTFAC_SD <- sd(PFTFAC_Data, na.rm=TRUE);
 hist(PFTFAC_Data, breaks=40,main="Histogram of Proportion of Full-time Faculty Staff",xlab="Proportion of Faculty that is Full-time");
 
 #Find mean, standard deviation, and plot a histogram for RET_COMBINE
+#We ended up not using this vairable for our Academic Student Success SuperScore, because it had too many NA values
 RET_Data <- as.numeric(as.character(SuperScoreData$RET_COMBINE));
 RET_Mean <- mean(RET_Data, na.rm=TRUE);
 RET_SD <- sd(RET_Data, na.rm=TRUE);
-hist(RET_Data, breaks=40, main="Histogram of Part-time Completion Rate",xlab="First-time, Part-time Completion Rate");
 
 #Find mean, standard deviation, and plot a histogram for WDRAW_ORIG_YR3_RT
 WDRAW_Data <- as.numeric(as.character(SuperScoreData$WDRAW_ORIG_YR3_RT));
 WDRAW_Mean <- mean(WDRAW_Data, na.rm=TRUE);
 WDRAW_SD <- sd(WDRAW_Data, na.rm=TRUE);
 hist(WDRAW_Data, breaks=40, main="Histogram of percent withdrawn from orig inst within 3yrs",xlab="Percent Withdrawn from orig inst within 3yrs");
-
 
 #Next, we will find the Z-Scores for each of the above variables, which will help us to form the "SuperScores"
 CollegeScoreCard$CDR2_Z_Score <- (CDR2_Data - CDR2_Mean)/CDR2_SD;
@@ -122,29 +137,13 @@ States_Data_freq = table(States_Data);
 colors = c("red","yellow","green","violet","orange","blue","pink","cyan");
 barplot(States_Data_freq, col=colors);
 # Barplot of the mean of graduate debt by states within the region
-barplot(tapply(as.numeric((as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP))), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of the grad debt by states within the region", ylab="Mean of Grad Debt",col=colors)
+barplot(tapply(as.numeric((as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP))), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of the grad debt by states within the region", ylab="Mean of Grad Debt",col=colors);
 
 #Barplot the mean of in-state tuition by states within the region
-barplot(tapply(as.numeric(as.character(SuperScoreData$TUITIONFEE_IN)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of In-State Tuition by States within the Region", ylab="Mean of In-State Tuition", col=colors)
+barplot(tapply(as.numeric(as.character(SuperScoreData$TUITIONFEE_IN)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of In-State Tuition by States within the Region", ylab="Mean of In-State Tuition", col=colors);
 
 #Barplot the mean of out-of-state tuition by states within the region
-barplot(tapply(as.numeric(as.character(SuperScoreData$TUITIONFEE_OUT)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of Out-Of-State Tuition by States within the Region", ylab="Mean of Out-Of-State Tuition", col=colors)
-
-#run these if you do not have the packages installed
-#they will be useful for ggplot2 graphs
-install.packages("ggplot2");
-install.packages("Hmisc");
-install.packages("dplyr");
-install.packages("reshape");
-install.packages("lme4");
-#load libraries into R session
-library(ggplot2);
-library(Hmisc);
-library(dplyr);
-library(reshape);
-library(lme4);
-library(nlme);
-theme_set(theme_grey(base_size = 12));
+barplot(tapply(as.numeric(as.character(SuperScoreData$TUITIONFEE_OUT)), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of Out-Of-State Tuition by States within the Region", ylab="Mean of Out-Of-State Tuition", col=colors);
 
 #This uses the ggplot2 package to display a graph that shows a correlation between Average ACT scores 
 # for admitted students and the financial stability associated with students attending a specific school
@@ -153,7 +152,7 @@ ggplot(data = CollegeScoreCard, aes(ACTCM75, y=Financial_Stability_SuperScore)) 
   ylab("Financial Stability SuperScore") +
   geom_boxplot() +
   ggtitle("Admitted Student ACT Composite 75th Percentile and Financial Stability") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5));
 
 #This uses the ggplot2 package to display a graph that shows a correlation between Average ACT scores 
 # for admitted students and the academic student success SuperScore associated with students attending a specific school
@@ -162,7 +161,7 @@ ggplot(data = CollegeScoreCard, aes(ACTCM75, y=Academic_Student_Success_SuperSco
   ylab("Academic Student Success SuperScore") +
   geom_boxplot() +
   ggtitle("Admitted Student ACT Composite 75th Percentile and Academic Student Success") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5));
 
 # Frequency distribution of the college sizes in Maryland
 mdstate = States_Data == "Maryland";
