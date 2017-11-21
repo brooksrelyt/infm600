@@ -121,6 +121,8 @@ States_Data = SuperScoreData$ST_FIPS_DESC;
 States_Data_freq = table(States_Data);
 colors = c("red","yellow","green","violet","orange","blue","pink","cyan");
 barplot(States_Data_freq, col=colors);
+# Barplot of the mean of graduate debt by states within the region
+barplot(tapply(as.numeric((as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP))), SuperScoreData$ST_FIPS_DESC, mean, na.rm=TRUE), main="Mean of the grad debt by states within the region", ylab="Mean of Grad Debt",col=colors)
 
 #run these if you do not have the packages installed
 #they will be useful for ggplot2 graphs
