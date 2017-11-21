@@ -30,67 +30,67 @@ SuperScoreData <- CollegeScoreCard[c(1,15,19,13,25,101,102,107,111,132,135,138,1
 CDR2_Data <- as.numeric(as.character(SuperScoreData$CDR2));
 CDR2_Mean <- mean(CDR2_Data, na.rm=TRUE);
 CDR2_SD <- sd(CDR2_Data, na.rm=TRUE);
-hist(CDR2_Data, breaks=40);
+hist(CDR2_Data, breaks=40, main="Histogram of 2yrs default rate",xlab="2yrs default rate");
 
 #Find mean, standard deviation, and plot a histogram for CDR3
 CDR3_Data <- as.numeric(as.character(SuperScoreData$CDR3));
 CDR3_Mean <- mean(CDR3_Data, na.rm=TRUE);
 CDR3_SD <- sd(CDR3_Data, na.rm=TRUE);
-hist(CDR3_Data, breaks=40);
+hist(CDR3_Data, breaks=40, main="Histogram of 3yrs default rate", xlab="3yrs default rate");
 
 #Find mean, standard deviation, and plot a histogram for MN_EARN_WNE_P10
 MN_EARN_Data <- as.numeric(as.character(SuperScoreData$MN_EARN_WNE_P10));
 MN_EARN_Mean <- mean(MN_EARN_Data, na.rm=TRUE);
 MN_EARN_SD <- sd(MN_EARN_Data, na.rm=TRUE);
-hist(MN_EARN_Data, breaks=40);
+hist(MN_EARN_Data, breaks=40, main="Histogram of average earnings 10yrs after graduating",xlab="average earnings 10yrs after grad");
 
 #Find mean, standard deviation, and plot a histogram for GRAD_DEBT_MDN_SUPP
 GRAD_DEBT_Data <- as.numeric(as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP));
 GRAD_DEBT_Mean <- mean(GRAD_DEBT_Data, na.rm=TRUE);
 GRAD_DEBT_SD <- sd(GRAD_DEBT_Data, na.rm=TRUE);
-hist(GRAD_DEBT_Data, breaks=40);
+hist(GRAD_DEBT_Data, breaks=40, main="Histogram of Median Debt of Graduates",xlab="Median Debt of Graduates");
 
 #Find mean, standard deviation, and plot a histogram for TUITIONFEE_IN
 TUIT_IN_Data <- as.numeric(as.character(SuperScoreData$TUITIONFEE_IN));
 TUIT_IN_Mean <- mean(TUIT_IN_Data, na.rm=TRUE);
 TUIT_IN_SD <- sd(TUIT_IN_Data, na.rm=TRUE);
-hist(TUIT_IN_Data, breaks=40);
+hist(TUIT_IN_Data, breaks=40, main="Histogram of In-State Tuition",xlab="In-State Tuition");
 
 #Find mean, standard deviation, and plot a histogram for TUITIONFEE_OUT
 TUIT_OUT_Data <- as.numeric(as.character(SuperScoreData$TUITIONFEE_OUT));
 TUIT_OUT_Mean <- mean(TUIT_OUT_Data, na.rm=TRUE);
 TUIT_OUT_SD <- sd(TUIT_OUT_Data, na.rm=TRUE);
-hist(TUIT_OUT_Data, breaks=40);
+hist(TUIT_OUT_Data, breaks=40, main="Histogram of Out-Of-State Tuition", xlab="Out-of-State Tuition");
 
 #Find mean, standard deviation, and plot a histogram for RET_FT_COMBINE
 RET_FT_Data <- as.numeric(as.character(SuperScoreData$RET_FT_COMBINE));
 RET_FT_Mean <- mean(RET_FT_Data, na.rm=TRUE);
 RET_FT_SD <- sd(RET_FT_Data, na.rm=TRUE);
-hist(RET_FT_Data, breaks=40);
+hist(RET_FT_Data, breaks=40, main="Histogram of Full-time Retention Rate", xlab="First-time Full-time Student Retention Rate");
 
 #Find mean, standard deviation, and plot a histogram for C150_COMBINE
 C150_Data <- as.numeric(as.character(SuperScoreData$C150_COMBINE));
 C150_Mean <- mean(C150_Data, na.rm=TRUE);
 C150_SD <- sd(C150_Data, na.rm=TRUE);
-hist(C150_Data, breaks=40);
+hist(C150_Data, breaks=40, main="Histogram of Completion Rate",xlab="First-time Full-time Completion Rate");
 
 #Find mean, standard deviation, and plot a histogram for PFTFAC
 PFTFAC_Data <- as.numeric(as.character(SuperScoreData$PFTFAC));
 PFTFAC_Mean <- mean(PFTFAC_Data, na.rm=TRUE);
 PFTFAC_SD <- sd(PFTFAC_Data, na.rm=TRUE);
-hist(PFTFAC_Data, breaks=40);
+hist(PFTFAC_Data, breaks=40,main="Histogram of Proportion of Full-time Faculty Staff",xlab="Proportion of Faculty that is Full-time");
 
 #Find mean, standard deviation, and plot a histogram for RET_COMBINE
 RET_Data <- as.numeric(as.character(SuperScoreData$RET_COMBINE));
 RET_Mean <- mean(RET_Data, na.rm=TRUE);
 RET_SD <- sd(RET_Data, na.rm=TRUE);
-hist(RET_Data, breaks=40);
+hist(RET_Data, breaks=40, main="Histogram of Part-time Completion Rate",xlab"First-time, Part-time Completion Rate");
 
 #Find mean, standard deviation, and plot a histogram for WDRAW_ORIG_YR3_RT
 WDRAW_Data <- as.numeric(as.character(SuperScoreData$WDRAW_ORIG_YR3_RT));
 WDRAW_Mean <- mean(WDRAW_Data, na.rm=TRUE);
 WDRAW_SD <- sd(WDRAW_Data, na.rm=TRUE);
-hist(WDRAW_Data, breaks=40);
+hist(WDRAW_Data, breaks=40), main="Histogram of percent withdrawn from orig inst within 3yrs",xlab="Percent Withdrawn from orig inst within 3yrs");
 
 
 #Next, we will find the Z-Scores for each of the above variables, which will help us to form the "SuperScores"
@@ -155,24 +155,6 @@ ggplot(data = CollegeScoreCard, aes(ACTCM75, y=Academic_Student_Success_SuperSco
   geom_boxplot() +
   ggtitle("Admitted Student ACT Composite 75th Percentile and Academic Student Success") +
   theme(plot.title = element_text(hjust = 0.5))
-
-#Find mean, standard deviation, and plot a histogram for GRAD_DEBT_MDN_SUPP
-GRAD_DEBT_Data <- as.numeric(as.character(SuperScoreData$GRAD_DEBT_MDN_SUPP));
-GRAD_DEBT_Mean <- mean(GRAD_DEBT_Data, na.rm=TRUE);
-GRAD_DEBT_SD <- sd(GRAD_DEBT_Data, na.rm=TRUE);
-hist(GRAD_DEBT_Data, breaks=40, main="Histogram of Median Debt of Graduates", xlab="Median Debt of Graduates");
-
-#Find mean, standard deviation, and plot a histogram for TUITIONFEE_IN
-TUIT_IN_Data <- as.numeric(as.character(SuperScoreData$TUITIONFEE_IN));
-TUIT_IN_Mean <- mean(TUIT_IN_Data, na.rm=TRUE);
-TUIT_IN_SD <- sd(TUIT_IN_Data, na.rm=TRUE);
-hist(TUIT_IN_Data, breaks=40, main="Histogram of In-State Tuition",xlab="In-State Tuition");
-
-#Find mean, standard deviation, and plot a histogram for TUITIONFEE_OUT
-TUIT_OUT_Data <- as.numeric(as.character(SuperScoreData$TUITIONFEE_OUT));
-TUIT_OUT_Mean <- mean(TUIT_OUT_Data, na.rm=TRUE);
-TUIT_OUT_SD <- sd(TUIT_OUT_Data, na.rm=TRUE);
-hist(TUIT_OUT_Data, breaks=40,main="Histogram of Out-Of-State Tuition", xlab="Out-Of-State Tuition");
 
 # Frequency distribution of the college sizes in Maryland
 mdstate = States_Data == "Maryland";
