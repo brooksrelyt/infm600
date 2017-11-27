@@ -20,22 +20,46 @@ library(lme4);
 library(nlme);
 theme_set(theme_grey(base_size = 12));
 
-#Create manageable data subset of the columns that will be used to form our two "SuperScores".
+# There are 4 key factors that a parent and/or student uses to evaluate a college or university
+#i. Financial stability of the institution
+#ii. Academic success of the institution
+#iii.	Tuition cost – provided by the data set
+#iv.	Proximity of the institution to home – provided by the data set
 
-# "Financial Stability" SuperScore
+#To calculate the financial stability of the institutions within the region, we will calculate the z-score for each of the 
+#   selected variable. We will then add the z-scores to arrive at the financial stability superscore
+#To calculate the academic success of an institution within the region, we will calculate the z-score for each of the selected variable.
+#   We will then add the z-scores to arrive at the academic success superscore
+#We will then use the Superscores to identify the top 10 schools
+
+# "Financial Stability" SuperScore variables
 #(CDR2) 2 year default rate, (CDR3) 3 year default rate, 
 #(MN_EARN_WNE_P10) average earnings 10 years after graduating,
 #(GRAD_DEBT_MDN_SUPP) Median debt of completers, 
 #(TUITIONFEE_IN) in state tuition costs, 
 #(TUITIONFEE_OUT) Out-of-state tuition costs
 
-# "Academic Student Success" SuperScore
+# "Academic Student Success" SuperScore variables
 #(RET_FT_COMBINE, which is a combination of RET_FT4, RET_FTL4) First-time, full-time student retention rate,
 #(C150_COMBINE, which is a combination of C150_4, C150_L4) Completion rate for first-time, full-time students, 
 #(PFTFAC) Proportion of faculty that is full-time,
 #(RET_COMBINE, which is a combination of RET_PT4, RET_PTL4) First-time, part-time student retention rate,
 #(WDRAW_ORIG_YR3_RT) Percent withdrawn from original institution within 3 years
 
+#To create the SuperScore Data, we created a subset with the following variables
+#i.	Institution ID (OPEID)
+#ii.	State - (ST_FIPS_DESC)
+#iii.	local of institution - (LOCALE_DESC)
+#iv.	public or private institution – (CONT_DESC)
+#v.	Carnegie rating – (CCSIZE_DESC)
+#vi.	tuition costs – (TUITIONFEE_IN, TUITIONFEE_OUT)
+#vii.	proportion of faculty staff full-time (PFTFAC) 
+#viii.	completion rate – (C150_4_C150_L4) 
+#ix.	retention rates – (RET_FT4_FTL4)
+#x.	default rates. – (CDR2, CDR3)
+#xi.	average student earnings – (MN_EARN_WNE_P10)
+#xii.	median loan debt of graduates – (GRAD_DEBT_MDN_SUPP)
+#xiii.	withdrawal rate – (WDRAW_ORIG_YR3_RT)
 SuperScoreData <- CollegeScoreCard[c(1,15,19,13,25,101,102,107,111,132,135,138,139,151,159,165)];
 
 #The idea will be to find the mean and median for each variable.
