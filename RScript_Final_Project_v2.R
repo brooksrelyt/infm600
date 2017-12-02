@@ -17,7 +17,6 @@ View(CollegeScoreCard);
 #(RET_FT_COMBINE, which is a combination of RET_FT4, RET_FTL4) First-time, full-time student retention rate,
 #(C150_COMBINE, which is a combination of C150_4, C150_L4) Completion rate for first-time, full-time students, 
 #(PFTFAC) Proportion of faculty that is full-time,
-#(RET_COMBINE, which is a combination of RET_PT4, RET_PTL4) First-time, part-time student retention rate,
 #(WDRAW_ORIG_YR3_RT) Percent withdrawn from original institution within 3 years
 
 SuperScoreData <- CollegeScoreCard[c(1,15,19,13,25,101,102,107,111,132,135,138,139,151,159,165)];
