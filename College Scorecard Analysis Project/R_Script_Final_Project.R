@@ -363,12 +363,13 @@ Persona1Data <- subset(CollegeScoreCardData, ST_FIPS_DESC == "New York" & CONTRO
 Persona1_SFS_Sort <- head(Persona1Data[order(Persona1Data$Financial_Stability_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona1_SFS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona1_SFS_Sort, file = "Persona1_SFS_Sort.xlsx", sheetName = "Sheet1");
+View(Persona1_SFS_Sort);
 
 #After we use the individual persona to filter down to a subset of schools the student is interested in, we sort that list by the Student Academic Success Super Score, and present a list of the top 5 ranking institutions 
 Persona1_SAS_Sort <- head(Persona1Data[order(Persona1Data$Academic_Student_Success_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona1_SAS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona1_SAS_Sort, file = "Persona1_SAS_Sort.xlsx", sheetName = "Sheet1");
-
+View(Persona1_SAS_Sort);
 
 #For Persona #2, we want to apply the following filters, based on their personal criteria
 #1. State = Maryland, Virginia, or DC
@@ -381,12 +382,13 @@ Persona2Data <- subset(CollegeScoreCardData, (ST_FIPS_DESC == "Maryland" | ST_FI
 Persona2_SFS_Sort <- head(Persona2Data[order(Persona2Data$Financial_Stability_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona2_SFS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona2_SFS_Sort, file = "Persona2_SFS_Sort.xlsx", sheetName = "Sheet1");
+View(Persona2_SFS_Sort);
 
 #After we use the individual persona to filter down to a subset of schools the student is interested in, we sort that list by the Student Academic Success Super Score, and present a list of the top 5 ranking institutions 
 Persona2_SAS_Sort <- head(Persona2Data[order(Persona2Data$Academic_Student_Success_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona2_SAS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona2_SAS_Sort, file = "Persona2_SAS_Sort.xlsx", sheetName = "Sheet1");
-
+View(Persona2_SAS_Sort);
 
 #For Persona #3, we want to apply the following filters, based on their personal criteria
 #1. State = Maryland, Virginia, DC, Delaware, or Pennsylvania
@@ -398,12 +400,13 @@ Persona3Data <- subset(CollegeScoreCardData, (ST_FIPS_DESC == "Maryland" | ST_FI
 Persona3_SFS_Sort <- head(Persona3Data[order(Persona3Data$Financial_Stability_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona3_SFS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona3_SFS_Sort, file = "Persona3_SFS_Sort.xlsx", sheetName = "Sheet1");
+View(Persona3_SFS_Sort);
 
 #After we use the individual persona to filter down to a subset of schools the student is interested in, we sort that list by the Student Academic Success Super Score, and present a list of the top 5 ranking institutions 
 Persona3_SAS_Sort <- head(Persona3Data[order(Persona3Data$Academic_Student_Success_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona3_SAS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona3_SAS_Sort, file = "Persona3_SAS_Sort.xlsx", sheetName = "Sheet1");
-
+View(Persona3_SAS_Sort);
 
 #For Persona #4, we want to apply the following filters, based on their personal criteria
 #1. State = Pennsylvania or New Jersey
@@ -416,12 +419,13 @@ Persona4Data <- subset(CollegeScoreCardData, (ST_FIPS_DESC == "Pennsylvania" | S
 Persona4_SFS_Sort <- head(Persona4Data[order(Persona4Data$Financial_Stability_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona4_SFS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona4_SFS_Sort, file = "Persona4_SFS_Sort.xlsx", sheetName = "Sheet1");
+View(Persona4_SFS_Sort);
 
 #After we use the individual persona to filter down to a subset of schools the student is interested in, we sort that list by the Student Academic Success Super Score, and present a list of the top 5 ranking institutions 
 Persona4_SAS_Sort <- head(Persona4Data[order(Persona4Data$Academic_Student_Success_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona4_SAS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona4_SAS_Sort, file = "Persona4_SAS_Sort.xlsx", sheetName = "Sheet1");
-
+View(Persona4_SAS_Sort);
 
 #In order to download the entire dataset with our Super Scores included, use the following command: write.csv(CollegeScoreCardData, file = "CollegeScoreCardData_Team_TAZY_Edit.csv");
 
