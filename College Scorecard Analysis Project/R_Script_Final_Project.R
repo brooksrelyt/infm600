@@ -1,6 +1,16 @@
 #Before running this script, it will be necessary to read the written summary document explaining the overview of our entire project scenario, the various research steps and methods/logic, and the results
-#URL: *************Needs inserted later*****************
+#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/College%20Scorecard%20Research%20Analysis.docx
 #There is too much information regarding this research project and analysis to explain it all in the comments of this script, so the above written summary was necessary
+
+# Use getwd() to find the R working directory
+# Download the College Scorecard dataset ZIP file from our GitHub directory below
+# https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/Data/raw-data.csv.zip
+# Unzip that downloaded file, and save the CSV file inside into your current working directory
+# This file should be named "raw-data.csv"
+
+#Saving "raw-data.csv" as a data frame to be referenced within this script
+AllData<-read.csv("raw-data.csv",header = TRUE);
+
 
 # **IF NEEDED** We need to make sure that we have all packages intalled that will be used for plotting
 install.packages("ggplot2");
@@ -18,20 +28,12 @@ library(lme4);
 library(nlme);
 theme_set(theme_grey(base_size = 12));
 
-# Use getwd() to find the R working directory
-# Download the College Scorecard dataset ZIP file from our GitHub directory below
-# https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/Data/raw-data.csv.zip
-# Unzip that downloaded file, and save the CSV file inside into your current working directory
-# This file should be named "raw-data.csv"
-
-#Saving "raw-data.csv" as a data frame to be referenced within this script
-AllData<-read.csv("raw-data.csv",header = TRUE);
 
 #Only keeping the columns that we determined may be useful for analysis
 #Reference "Columns and Variables Used From Raw Data File.xlsx" on our GitHub repository in order to know which variables/columns are being kept below
-#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/Columns%20and%20Variables%20Used%20From%20Raw%20Data%20File.xlsx
+#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/Data/Columns%20and%20Variables%20Used%20From%20Raw%20Data%20File.xlsx
 #Potential values for each variable are also explained in a Data Dictonary that has been prepared by the US Dept of Ed, "College_Scorecard_Data_Dictionary.xlsx", link is below
-#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/College_Scorecard_Data_Dictionary.xlsx
+#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/Data/College_Scorecard_Data_Dictionary.xlsx
 CollegeScoreCardData <- AllData[c(2,3,4,5,8,12,13,15,16,17,18,19,20,24,25,26,27,28,29,30,31,32,33,34,35,36,37,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,291,292,293,294,295,296,297,298,299,300,301,304,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,353,354,357,358,359,360,361,362,363,364,365,366,377,378,379,380,381,382,383,384,385,386,387,388,397,398,399,400,401,402,403,404,405,411,412,413,414,415,416,417,418,419,429,430,431,432,438,439,440,441,1605,1606,1607,1610,1611,1613,1614,1615,1616,1637,1638,1639,1640,1641,1642,1643,1644,1645,1709,1710,1711,1774,1775,1776,1777,628)];
 
 #Only keeping institutions in our dataset that are degree-granting
@@ -264,8 +266,8 @@ for(i in 1:NumRows) {
 
 
 #We need to compute the two "Super Score" institutional ratings, Student Financial Stability and Student Academic Success
-#Both of those "Super Scores" ratings are explained in our written summary document below
-#URL: ***********Needs inserted onto GitHub**********
+#Both of those "Super Scores" ratings are explained in points 4 and 5 in our written summary document below
+#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/College%20Scorecard%20Research%20Analysis.docx
 #Find mean and standard deviation for 2-year default rates (CDR2)
 CDR2_Data <- as.numeric(as.character(CollegeScoreCardData$CDR2));
 CDR2_Mean <- mean(CDR2_Data, na.rm=TRUE);
@@ -338,8 +340,10 @@ CollegeScoreCardData$Financial_Stability_SuperScore <- (CollegeScoreCardData$CDR
 CollegeScoreCardData$Academic_Student_Success_SuperScore <- (CollegeScoreCardData$RET_FT_Z_Score) + (CollegeScoreCardData$C150_Z_Score) + (CollegeScoreCardData$PFTFAC_Z_Score) + (CollegeScoreCardData$WDRAW_Z_Score*-1);
 
 #-------PERSONA ANALYSIS BELOW--------#
-#We created four personas typical of an 11th grade Prince George's County publich high school student, in order to help test our model of recommending schools for them to consider attending
-#URL: **********INSERT LATER**************
+#We created four personas typical of an 11th grade Prince George's County publich high school student/family, in order to help test our model of recommending schools for them to consider attending
+#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/Persona%20Examples%20for%20College%20ScoreCard%20Data.docx
+
+#You may want to export datasets from R to Excel, but you will need the appropriate packages/libraries included, so use the following commands if that is what you want to do: install.packages("xlsx"); library("xlsx");
 
 #THe columns will need to be converted from factors to numeric vectors, in order to filter by them for analysis of the various personas. In-state Tuition, Out-of-state Tuition, ACT Composite 25th Percentile of Admitted Students 
 CollegeScoreCardData$TUITIONFEE_IN <- as.numeric(as.character(CollegeScoreCardData$TUITIONFEE_IN));
@@ -417,3 +421,47 @@ Persona4_SFS_Sort <- head(Persona4Data[order(Persona4Data$Financial_Stability_Su
 Persona4_SAS_Sort <- head(Persona4Data[order(Persona4Data$Academic_Student_Success_SuperScore, decreasing = TRUE),], 5);
 #Optional command to view the top 5 list: View(Persona4_SAS_Sort)
 #Optional Command to export this top 5 list to Excel. It requires you to download the "xlsx" package and load the library as well.: write.xlsx(Persona4_SAS_Sort, file = "Persona4_SAS_Sort.xlsx", sheetName = "Sheet1");
+
+
+#In order to download the entire dataset with our Super Scores included, use the following command: write.csv(CollegeScoreCardData, file = "CollegeScoreCardData_Team_TAZY_Edit.csv");
+
+
+#Below are some graphs/plots that we created, and used in our Power Point presentation (URL below)
+#Power Point Presentation URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/College%20Selection%20Model%20Presentation.pptx
+#Defining Colors to be used in the plots below
+colors = c("red","yellow","green","violet","orange","blue","pink","cyan");
+
+# Financial Stability vs Academic Success
+plot(CollegeScoreCardData$Academic_Student_Success_SuperScore,CollegeScoreCardData$Financial_Stability_SuperScore, main="Financial Stability vs Academic Success", xlab="Academic Success", ylab="Financial Stability", col=colors)
+
+# In-State Tuition vs Out-of-State Tuition
+plot(as.numeric(as.character(CollegeScoreCardData$Academic_Student_Success_SuperScore)),as.numeric(as.character(CollegeScoreCardData$Financial_Stability_SuperScore)), main="Financial Stability vs Academic Success", xlab="Academic Success", ylab="Financial Stability", col=colors)
+
+# Histogram of Financial Stability Superscore
+hist(as.numeric(as.character(CollegeScoreCardData$Academic_Student_Success_SuperScore)), main="Histogram of Financial Stability Superscore", xlab="Financial SuperScore",  col="blue")
+# Histogram of Academic Student Success
+hist(as.numeric(as.character(CollegeScoreCardData$Academic_Student_Success_SuperScore)), main="Histogram of Academic Success Superscore", xlab="Academic Success SuperScore",  col="green")
+
+# Histogram of default within 3yrs
+hist(as.numeric(as.character(CollegeScoreCardData$CDR3)), main="Histogram of Default within 3yrs", xlab="Default within 3yrs",  col="blue")
+
+# Histogram of Graduate Median Debt
+hist(as.numeric(as.character(CollegeScoreCardData$GRAD_DEBT_MDN_SUPP)), main="Histogram of Graduate Median Debt", xlab="Graduate  Median Debt",  col="yellow")
+
+#Histogram of Mean Earnings 10 years after graduating
+hist(as.numeric(as.character(CollegeScoreCardData$MD_EARN_WNE_P10)), main="Histogram of Mean Earnings 10 yrs after graduating", xlab="Graduate  Median Debt",  col="cyan")
+
+# Histogran of First-time full-time retention rate
+hist(as.numeric(as.character(CollegeScoreCardData$RET_FT_COMBINE)), main="Histogram of First-time Full-time Retention Rate", xlab="First-Time Full-time Retention Rate",  col="blue")
+
+# Histogram of First-time full-time completion rate
+hist(as.numeric(as.character(CollegeScoreCardData$C150_COMBINE)), main="Histogram of First-time Full-time Completion Rate", xlab="First-Time Full-time Completion Rate",  col="green")
+
+# Histogram of withdrawal from original institution within 3 yrs
+hist(as.numeric(as.character(CollegeScoreCardData$WDRAW_ORIG_YR3_RT)), main="Histogram of Withdrwawal from Original Inst within 3 yrs", xlab="Withdrawal from original institution within 3yrs",  col="yellow")
+
+# Histogram of Proportion of Faculty Full-time Staff
+hist(as.numeric(as.character(CollegeScoreCardData$PFTFAC)), main="Histogram of Proportion of Faculty Full-time Staff", xlab="Proportion of Faculty Full-time Staff",  col="cyan")
+
+
+
