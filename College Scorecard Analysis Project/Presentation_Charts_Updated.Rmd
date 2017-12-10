@@ -1,0 +1,335 @@
+---
+title: "Updated Chart from Project Presentation"
+output:
+  word_document: default
+  pdf_document: default
+  html_notebook: default
+---
+
+```{r}
+#Saving "raw-data.csv" as a data frame to be referenced within this script
+AllData<-read.csv("raw-data.csv",header = TRUE);
+
+#Only keeping the columns that we determined may be useful for analysis
+#Reference "Columns and Variables Used From Raw Data File.xlsx" on our GitHub repository in order to know which variables/columns are being kept below
+#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/Columns%20and%20Variables%20Used%20From%20Raw%20Data%20File.xlsx
+#Potential values for each variable are also explained in a Data Dictonary that has been prepared by the US Dept of Ed, "College_Scorecard_Data_Dictionary.xlsx", link is below
+#URL: https://github.com/brooksrelyt/infm600/blob/master/College%20Scorecard%20Analysis%20Project/College_Scorecard_Data_Dictionary.xlsx
+CollegeScoreCardData <- AllData[c(2,3,4,5,8,12,13,15,16,17,18,19,20,24,25,26,27,28,29,30,31,32,33,34,35,36,37,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,291,292,293,294,295,296,297,298,299,300,301,304,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,353,354,357,358,359,360,361,362,363,364,365,366,377,378,379,380,381,382,383,384,385,386,387,388,397,398,399,400,401,402,403,404,405,411,412,413,414,415,416,417,418,419,429,430,431,432,438,439,440,441,1605,1606,1607,1610,1611,1613,1614,1615,1616,1637,1638,1639,1640,1641,1642,1643,1644,1645,1709,1710,1711,1774,1775,1776,1777,628)];
+
+#Only keeping institutions in our dataset that are degree-granting
+CollegeScoreCardData <- subset(CollegeScoreCardData, HIGHDEG == 1 | HIGHDEG == 2 | HIGHDEG == 3 | HIGHDEG == 4);
+
+#Only keeping institutions in our dataset that are no currently on Heightened Cash Monitoring by the Department of Education
+CollegeScoreCardData <- subset(CollegeScoreCardData, HCM2 == 0);
+
+#Only keeping institutions in our dataset that are currently operating
+CollegeScoreCardData <- subset(CollegeScoreCardData, CURROPER == 1);
+
+#Only keeping institutions in our dataset that are not exclusively at the Graduate/Professional level
+CollegeScoreCardData <- subset(CollegeScoreCardData, CCSIZSET == 1 | CCSIZSET == 2 | CCSIZSET == 3 | CCSIZSET == 4 | CCSIZSET == 5 | CCSIZSET == 6 | CCSIZSET == 7 | CCSIZSET == 8 | CCSIZSET == 9 | CCSIZSET == 10 | CCSIZSET == 11 | CCSIZSET == 12 | CCSIZSET == 13 | CCSIZSET == 14 | CCSIZSET == 15 | CCSIZSET == 16 | CCSIZSET == 17);
+
+#Only keeping institutions in our dataset that are currently within the 50 states or District of Columbia
+CollegeScoreCardData <- subset(CollegeScoreCardData, ST_FIPS == 1 | ST_FIPS == 2 | ST_FIPS == 4 | ST_FIPS == 5 | ST_FIPS == 6 | ST_FIPS == 8 | ST_FIPS == 9 | ST_FIPS == 10 | ST_FIPS == 11 | ST_FIPS == 12 | ST_FIPS == 13 | ST_FIPS == 15 | ST_FIPS == 16 | ST_FIPS == 17 | ST_FIPS == 18 | ST_FIPS == 19 | ST_FIPS == 20 | ST_FIPS == 21 | ST_FIPS == 22 | ST_FIPS == 23 | ST_FIPS == 24 | ST_FIPS == 25 | ST_FIPS == 26 | ST_FIPS == 27 | ST_FIPS == 28 | ST_FIPS == 29 | ST_FIPS == 30 | ST_FIPS == 31 | ST_FIPS == 32 | ST_FIPS == 33 | ST_FIPS == 34 | ST_FIPS == 35 | ST_FIPS == 36 | ST_FIPS == 37 | ST_FIPS == 38 | ST_FIPS == 39 | ST_FIPS == 40 | ST_FIPS == 41 | ST_FIPS == 42 | ST_FIPS == 43 | ST_FIPS == 44 | ST_FIPS == 45 | ST_FIPS == 46 | ST_FIPS == 47 | ST_FIPS == 48 | ST_FIPS == 49 | ST_FIPS == 50 | ST_FIPS == 51 | ST_FIPS == 53 | ST_FIPS == 54 | ST_FIPS == 55 | ST_FIPS == 56);
+
+#Finding number of rows in the CollegeScoreCardData element, so that the for loops below function properly
+NumRows <- nrow(CollegeScoreCardData);
+#Add a column to CollegeScoreCard to be the definition/description for the numeric coded values of the Locale of the instutution (LOCALE). This makes plotting/labeling easier later as there are several numerically coded values for this variable
+CollegeScoreCardData$LOCALE_DESC <- as.character(CollegeScoreCardData$LOCALE);
+
+#This for loop goes through each element of the LOCALE column, and inserts the description of the coded variable value, according to the Data Dictionary
+for(i in 1:NumRows) {
+  if (CollegeScoreCardData$LOCALE[i] == 11){CollegeScoreCardData$LOCALE_DESC[i] <- "City: Large";}
+  else if (CollegeScoreCardData$LOCALE[i] == 12){CollegeScoreCardData$LOCALE_DESC[i] <- "City: Midsize"}
+  else if (CollegeScoreCardData$LOCALE[i] == 13){CollegeScoreCardData$LOCALE_DESC[i] <- "City: Small"}
+  else if (CollegeScoreCardData$LOCALE[i] == 21){CollegeScoreCardData$LOCALE_DESC[i] <- "Suburb: Large"}
+  else if (CollegeScoreCardData$LOCALE[i] == 22){CollegeScoreCardData$LOCALE_DESC[i] <- "Suburb: Midsize"}
+  else if (CollegeScoreCardData$LOCALE[i] == 23){CollegeScoreCardData$LOCALE_DESC[i] <- "Suburb: Small"}
+  else if (CollegeScoreCardData$LOCALE[i] == 31){CollegeScoreCardData$LOCALE_DESC[i] <- "Town: Fringe"}
+  else if (CollegeScoreCardData$LOCALE[i] == 32){CollegeScoreCardData$LOCALE_DESC[i] <- "Town: Distant"}
+  else if (CollegeScoreCardData$LOCALE[i] == 33){CollegeScoreCardData$LOCALE_DESC[i] <- "Town: Remote"}
+  else if (CollegeScoreCardData$LOCALE[i] == 41){CollegeScoreCardData$LOCALE_DESC[i] <- "Rural: Fringe"}
+  else if (CollegeScoreCardData$LOCALE[i] == 42){CollegeScoreCardData$LOCALE_DESC[i] <- "Rural: Distant"}
+  else if (CollegeScoreCardData$LOCALE[i] == 43){CollegeScoreCardData$LOCALE_DESC[i] <- "Rural: Remote"}
+  else {CollegeScoreCardData$LOCALE_DESC[i] <- "NULL"}
+};
+
+#Add a column which is the definition/description for the numeric coded values of the US Address State of the instutution (ST_FIPS). This makes plotting easier later as there are several numerically coded values for this variable
+CollegeScoreCardData$ST_FIPS_DESC <- as.character(CollegeScoreCardData$ST_FIPS);
+
+#This for loop goes through each element of the ST_FIPS column, and inserts the description of the coded variable value, according to the Data Dictionary
+for(i in 1:NumRows) {
+  if (CollegeScoreCardData$ST_FIPS[i] == 1){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Alabama";}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 2){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Alaska"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 4){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Arizona"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 5){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Arkansas"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 6){CollegeScoreCardData$ST_FIPS_DESC[i] <- "California"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 8){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Colorado"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 9){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Connecticut"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 10){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Delaware"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 11){CollegeScoreCardData$ST_FIPS_DESC[i] <- "District of Columbia"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 12){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Florida"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 13){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Georgia"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 15){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Hawaii"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 16){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Idaho"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 17){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Illinois"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 18){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Indiana"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 19){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Iowa"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 20){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Kansas"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 21){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Kentucky"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 22){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Louisiana"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 23){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Maine"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 24){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Maryland"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 25){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Massachusetts"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 26){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Michigan"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 27){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Minnesota"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 28){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Mississippi"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 29){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Missouri"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 30){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Montana"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 31){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Nebraska"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 32){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Nevada"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 33){CollegeScoreCardData$ST_FIPS_DESC[i] <- "New Hampshire"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 34){CollegeScoreCardData$ST_FIPS_DESC[i] <- "New Jersey"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 35){CollegeScoreCardData$ST_FIPS_DESC[i] <- "New Mexico"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 36){CollegeScoreCardData$ST_FIPS_DESC[i] <- "New York"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 37){CollegeScoreCardData$ST_FIPS_DESC[i] <- "North Carolina"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 38){CollegeScoreCardData$ST_FIPS_DESC[i] <- "North Dakota"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 39){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Ohio"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 40){CollegeScoreCardData$ST_FIPS_DESC[i] <- "OKlahoma"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 41){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Oregon"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 42){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Pennsylvania"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 44){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Rhode Island"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 45){CollegeScoreCardData$ST_FIPS_DESC[i] <- "South Carolina"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 46){CollegeScoreCardData$ST_FIPS_DESC[i] <- "South Dakota"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 47){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Tennessee"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 48){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Texas"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 49){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Utah"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 50){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Vermont"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 51){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Virginia"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 53){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Washington"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 54){CollegeScoreCardData$ST_FIPS_DESC[i] <- "West Virginia"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 55){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Wisconsin"}
+  else if (CollegeScoreCardData$ST_FIPS[i] == 56){CollegeScoreCardData$ST_FIPS_DESC[i] <- "Wyoming"}
+  else {CollegeScoreCardData$LOCALE_DESC[i] <- "NULL"}
+};
+
+#Add a column which is the definition/description for the numeric coded values of the Control, public vs private, of the instutution (CONTROL). This makes plotting easier later as there are several numerically coded values for this variable
+CollegeScoreCardData$CONTROL_DESC <- as.character(CollegeScoreCardData$CONTROL);
+
+#This for loop goes through each element of the CONTROL column, and inserts the description of the coded variable value, according to the Data Dictionary
+for(i in 1:NumRows) {
+  if (CollegeScoreCardData$CONTROL[i] == 1){CollegeScoreCardData$CONTROL_DESC[i] <- "Public"}
+  else if (CollegeScoreCardData$CONTROL[i] == 2){CollegeScoreCardData$CONTROL_DESC[i] <- "Private nonprofit"}
+  else if (CollegeScoreCardData$CONTROL[i] == 3){CollegeScoreCardData$CONTROL_DESC[i] <- "Private for-profit"}
+  else {CollegeScoreCardData$CONTROL_DESC[i] <- "NULL"}
+};
+
+#Add a column which is the definition/description for the numeric coded values of the most predominately awarded degree of the instutution (PREDDEG). This makes plotting easier later as there are several numerically coded values for this variable
+CollegeScoreCardData$PREDDEG_DESC <- as.character(CollegeScoreCardData$PREDDEG);
+
+#This for loop goes through each element of the PREDDEG column, and inserts the description of the coded variable value, according to the Data Dictionary
+for(i in 1:NumRows) {
+  if (CollegeScoreCardData$PREDDEG[i] == 0){CollegeScoreCardData$PREDDEG_DESC[i] <- "Not classified"}
+  else if (CollegeScoreCardData$PREDDEG[i] == 1){CollegeScoreCardData$PREDDEG_DESC[i] <- "Predominantly certificate-degree granting"}
+  else if (CollegeScoreCardData$PREDDEG[i] == 2){CollegeScoreCardData$PREDDEG_DESC[i] <- "Predominantly associate's-degree granting"}
+  else if (CollegeScoreCardData$PREDDEG[i] == 3){CollegeScoreCardData$PREDDEG_DESC[i] <- "Predominantly bachelor's-degree granting"}
+  else if (CollegeScoreCardData$PREDDEG[i] == 4){CollegeScoreCardData$PREDDEG_DESC[i] <- "Entirely graduate-degree granting"}
+  else {CollegeScoreCardData$PREDDEG_DESC[i] <- "NULL"}
+};
+
+#Add a column which is the definition/description for the numeric coded values of the highest degree awarded of the instutution (HIGHDEG). This makes plotting easier later as there are several numerically coded values for this variable
+CollegeScoreCardData$HIGHDEG_DESC <- as.character(CollegeScoreCardData$HIGHDEG);
+
+#This for loop goes through each element of the HIGHDEG column, and inserts the description of the coded variable value, according to the Data Dictionary
+for(i in 1:NumRows) {
+  if (CollegeScoreCardData$HIGHDEG[i] == 0){CollegeScoreCardData$HIGHDEG_DESC[i] <- "Non-degree-granting"}
+  else if (CollegeScoreCardData$HIGHDEG[i] == 1){CollegeScoreCardData$HIGHDEG_DESC[i] <- "Certificate degree"}
+  else if (CollegeScoreCardData$HIGHDEG[i] == 2){CollegeScoreCardData$HIGHDEG_DESC[i] <- "Associate degree"}
+  else if (CollegeScoreCardData$HIGHDEG[i] == 3){CollegeScoreCardData$HIGHDEG_DESC[i] <- "Bachelor's degree"}
+  else if (CollegeScoreCardData$HIGHDEG[i] == 4){CollegeScoreCardData$HIGHDEG_DESC[i] <- "Graduate degree"}
+  else {CollegeScoreCardData$HIGHDEG_DESC[i] <- "NULL"}
+};
+
+#Add a column which is the definition/description for the numeric coded values of the Carnegie Basic Classification of the instutution (CCBASIC). This makes plotting easier later as there are several numerically coded values for this variable
+CollegeScoreCardData$CCBASIC_DESC <- as.character(CollegeScoreCardData$CCBASIC);
+
+#This for loop goes through each element of the CCBASIC column, and inserts the description of the coded variable value, according to the Data Dictionary
+for(i in 1:NumRows) {
+  if (CollegeScoreCardData$CCBASIC[i] == -2){CollegeScoreCardData$CCBASIC_DESC[i] <- "Not applicable"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 0){CollegeScoreCardData$CCBASIC_DESC[i] <- "Not classified"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 1){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: High Transfer-High Traditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 2){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: High Transfer-Mixed Traditional/Nontraditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 3){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: High Transfer-High Nontraditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 4){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: Mixed Transfer/Vocational & Technical-High Traditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 5){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: Mixed Transfer/Vocational & Technical-Mixed Traditional/Nontraditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 6){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: Mixed Transfer/Vocational & Technical-High Nontraditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 7){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: High Vocational & Technical-High Traditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 8){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: High Vocational & Technical-Mixed Traditional/Nontraditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 9){CollegeScoreCardData$CCBASIC_DESC[i] <- "Associate's Colleges: High Vocational & Technical-High Nontraditional"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 10){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Two-Year: Health Professions"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 11){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Two-Year: Technical Professions"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 12){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Two-Year: Arts & Design"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 13){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Two-Year: Other Fields"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 14){CollegeScoreCardData$CCBASIC_DESC[i] <- "Baccalaureate/Associate's Colleges: Associate's Dominant"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 15){CollegeScoreCardData$CCBASIC_DESC[i] <- "Doctoral Universities: Highest Research Activity"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 16){CollegeScoreCardData$CCBASIC_DESC[i] <- "Doctoral Universities: Higher Research Activity"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 17){CollegeScoreCardData$CCBASIC_DESC[i] <- "Doctoral Universities: Moderate Research Activity"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 18){CollegeScoreCardData$CCBASIC_DESC[i] <- "Master's Colleges & Universities: Larger Programs"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 19){CollegeScoreCardData$CCBASIC_DESC[i] <- "Master's Colleges & Universities: Medium Programs"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 20){CollegeScoreCardData$CCBASIC_DESC[i] <- "Master's Colleges & Universities: Small Programs"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 21){CollegeScoreCardData$CCBASIC_DESC[i] <- "Baccalaureate Colleges: Arts & Sciences Focus"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 22){CollegeScoreCardData$CCBASIC_DESC[i] <- "Baccalaureate Colleges: Diverse Fields"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 23){CollegeScoreCardData$CCBASIC_DESC[i] <- "Baccalaureate/Associate's Colleges: Mixed Baccalaureate/Associate's"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 24){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Faith-Related Institutions"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 25){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Medical Schools & Centers"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 26){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Other Health Professions Schools"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 27){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Engineering Schools"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 28){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Other Technology-Related Schools"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 29){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Business & Management Schools"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 30){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Arts, Music & Design Schools"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 31){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Law Schools"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 32){CollegeScoreCardData$CCBASIC_DESC[i] <- "Special Focus Four-Year: Other Special Focus Institutions"}
+  else if (CollegeScoreCardData$CCBASIC[i] == 33){CollegeScoreCardData$CCBASIC_DESC[i] <- "Tribal Colleges"}
+  else {CollegeScoreCardData$CCBASIC_DESC[i] <- "NULL"}
+};
+
+#Add a column which is the definition/description for the numeric coded values of the Carnegie Basic Size Classification of the instutution (CCSIZSET). This makes plotting easier later as there are several numerically coded values for this variable
+CollegeScoreCardData$CCSIZSET_DESC <- as.character(CollegeScoreCardData$CCSIZSET);
+
+#This for loop goes through each element of the CCSIZSET column, and inserts the description of the coded variable value, according to the Data Dictionary
+for(i in 1:NumRows) {
+  if (CollegeScoreCardData$CCSIZSET[i] == -2){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Not applicable"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 0){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Not classified"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 1){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Two-year, very small"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 2){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Two-year, small"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 3){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Two-year, medium"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 4){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Two-year, large"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 5){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Two-year, very large"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 6){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, very small, primarily nonresidential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 7){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, very small, primarily residential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 8){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, very small, highly residential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 9){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, small, primarily nonresidential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 10){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, small, primarily residential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 11){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, small, highly residential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 12){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, medium, primarily nonresidential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 13){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, medium, primarily residential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 14){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, medium, highly residential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 15){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, large, primarily nonresidential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 16){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, large, primarily residential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 17){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Four-year, large, highly residential"}
+  else if (CollegeScoreCardData$CCSIZSET[i] == 18){CollegeScoreCardData$CCSIZSET_DESC[i] <- "Exclusively graduate/professional"}
+  else {CollegeScoreCardData$CCSIZSET_DESC[i] <- "NULL"}
+};
+
+#Convert the retention columns to numeric, instead of as a factor(string)
+CollegeScoreCardData$RET_FT4 <- as.numeric(as.character(CollegeScoreCardData$RET_FT4));
+CollegeScoreCardData$RET_FTL4 <- as.numeric(as.character(CollegeScoreCardData$RET_FTL4));
+
+#Add a column which consolidates the values of two other columns representing first-time, full-time retention rate. One column is for 4-year schools and one column if for less than 4-year schools, so that is why we wanted to combine them into one consolidated column
+CollegeScoreCardData$RET_FT_COMBINE <- CollegeScoreCardData$RET_FT4;
+
+#This for loop goes through each element of the RET_FT4 and RET_FTL4 columns,and inserts the non-null value into the new RET_FT_COMBINE column
+for(i in 1:NumRows) {
+  ifelse(is.na(CollegeScoreCardData$RET_FT4[i]), CollegeScoreCardData$RET_FT_COMBINE[i] <- CollegeScoreCardData$RET_FTL4[i], CollegeScoreCardData$RET_FT_COMBINE[i] <- CollegeScoreCardData$RET_FT4[i])
+};
+
+#Convert the completion rate columns to numeric, instead of as a factor(string)
+CollegeScoreCardData$C150_4 <- as.numeric(as.character(CollegeScoreCardData$C150_4));
+CollegeScoreCardData$C150_L4 <- as.numeric(as.character(CollegeScoreCardData$C150_L4));
+
+#Add a column which consolidates the values of two other columns representing first-time, full-time completion rate. One column is for 4-year schools and one column if for less than 4-year schools, so that is why we wanted to combine them into one consolidated column
+CollegeScoreCardData$C150_COMBINE <- CollegeScoreCardData$C150_4;
+
+#This for loop goes through each element of the C150 and C150_L4 columns,and inserts the non-null value into the new RET_FT_COMBINE column
+for(i in 1:NumRows) {
+  ifelse(is.na(CollegeScoreCardData$C150_4[i]), CollegeScoreCardData$C150_COMBINE[i] <- CollegeScoreCardData$C150_L4[i], CollegeScoreCardData$C150_COMBINE[i] <- CollegeScoreCardData$C150_4[i])
+};
+
+```
+
+
+
+```{r}
+# We reduced the original data set to include only colleges that were in the US and DC, #excluding US territories, only degree-granting, currently operating, not under heighten #cash monitoring, and not exclusively graduate colleges. The reduced the number of colleges #from 7,593 to 3,824. We then plotted the number of colleges by region
+colors = c("red","yellow","green","violet","orange","blue","pink","cyan")
+Region = CollegeScoreCardData$REGION
+Region.freq = table(Region)
+xregion<-barplot(Region.freq, main="Colleges by Region", xlab= "Region",ylab="# of Colleges", names.arg=c("Service Schools","New England","Mid East","Great Lakes","Plains","Southeast","Southwest","Rocky Mountain","Far West"),las=2,col="green",cex.names = 0.7)
+text(x=xregion, y=Region.freq, label=Region.freq, pos=3, cex=0.8)
+```
+
+
+```{r}
+# We calcuated the number of collges in each locale. The LOcale were City, Rural, Suburb, #and Town. Each locale were further sub-divided by size, and proximity (distant, remote, #fringe)
+locale = CollegeScoreCardData$LOCALE_DESC
+locale.freq = table(locale)
+xlocal<-barplot(locale.freq, main="College Locale",ylab="Locale Count",cex.names=0.7,col="cyan", las=2)
+text(x=xlocal, y=locale.freq, label=locale.freq, pos=3, cex=0.8)
+```
+
+
+
+```{r}
+#To verify whether there is any correlation between In-State Tuition and Out-of-State Tuition for Public Colleges, a subset was created with just Public Colleges, and then In-State Tuition was plotted aganst Out-Of-State Tuition. The plot verifies that there is a correlation. As In-State Tuition increases, Out-Of-State Tuition increases
+
+# create public tuition subset
+PublicTuition<-subset(CollegeScoreCardData, CONTROL == 1)
+
+# Plot in-state tuition against out-of-state tuition for pubic colleges
+plot(as.numeric(as.character(PublicTuition$TUITIONFEE_IN)), as.numeric(as.character(PublicTuition$TUITIONFEE_OUT)), main = "In-State Tuition vs Out-of-State Tuition for Public Colleges", xlab="In-State Tuition", ylab="Out-Of-State Tuition", col=colors)
+
+#Add a regression line
+abline(lm(as.numeric(as.character(PublicTuition$TUITIONFEE_OUT))~as.numeric(as.character(PublicTuition$TUITIONFEE_IN))))
+```
+
+
+```{r}
+#To calculate the Financial Stability Score, we used 4 variables:
+# Percent of students who have defaulted or failed to meet specidied conditions within 2 years (CDR2 & CDR3)
+# Average earnings of students 10 years after graduating ()
+# Median debt of students who completed their degree
+# In-state and out-of-state tuition costs and fees
+# We used the plot function to verify the relationship between the variables
+# Verify the relationship beween tuition and default rate
+tuition = as.numeric(as.character(CollegeScoreCardData$TUITIONFEE_IN))
+default = (as.numeric(as.character(CollegeScoreCardData$CDR2))*100)
+plot(default,tuition, main="Tuition vs Default Rate", xlab="Default Rate [%]", ylab="Tuition [$]", col=colors)
+abline(lm(tuition~default))
+```
+
+
+```{r}
+# verify the relationship between tuition and median mean earnings.
+meanearn = as.numeric(as.character(CollegeScoreCardData$MN_EARN_WNE_P10))
+plot(tuition,meanearn,main="Tuition vs Mean Earnings", xlab="Tuition[$]", ylab="Mean Earnings 10 yrs after grad [$]", col=colors)
+abline(lm(meanearn~tuition))
+```
+
+
+```{r}
+# Histogram of Financial Stability variable - default within 3yrs
+hist((as.numeric(as.character(CollegeScoreCardData$CDR3))*100), main="Histogram of Default within 3yrs", xlab="Default within 3yrs [%]",  col="blue")
+
+```
+
+```{r}
+# Academic Success Variable - First-time Full-time Retention Rate
+hist((as.numeric(as.character(CollegeScoreCardData$RET_FT_COMBINE))*100), main="Histogram of First-time Full-time Retention Rate", xlab="First-Time Full-time Retention Rate [%]",  col="blue")
+```
+
+```{r}
+# Academic Success Variable - First-time Full-time Completion Rate
+hist((as.numeric(as.character(CollegeScoreCardData$C150_COMBINE))*100), main="Histogram of First-time Full-time Completion Rate", xlab="First-Time Full-time Completion Rate [%]",  col="green")
+```
+
+```{r}
+# Academic Success Variable - Withdrawn from Original Institution within 3yrs
+hist((as.numeric(as.character(CollegeScoreCardData$WDRAW_ORIG_YR3_RT))*100), main="Histogram of Withdrwawal from Original Inst within 3 yrs", xlab="Withdrawal from original institution within 3yrs [%]",  col="yellow")
+
+```
+
+```{r}
+# Academic Success Variable - Proportion of Faculty full-time Faculty Staff
+hist((as.numeric(as.character(CollegeScoreCardData$PFTFAC))*100), main="Histogram of Proportion of Full-time Faculty Staff", xlab="Proportion of Full-time Faculty Staff [%]",  col="cyan")
+```
+
