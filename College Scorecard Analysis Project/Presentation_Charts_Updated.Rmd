@@ -1,0 +1,98 @@
+---
+title: "Updated Chart from Project Presentation"
+output:
+  word_document: default
+  pdf_document: default
+  html_notebook: default
+---
+
+```{r}
+#PLEASE RUN R_Script_Final_Project.R to create the CollegeSCoreCardData dataset, before executing this notebook. Then click on the run button in each chunk of code below to display the charts that were modified based on recommendations made during the presentation
+```
+
+
+
+```{r}
+# We reduced the original data set to include only colleges that were in the US and DC, #excluding US territories, only degree-granting, currently operating, not under heighten #cash monitoring, and not exclusively graduate colleges. The reduced the number of colleges #from 7,593 to 3,824. We then plotted the number of colleges by region
+colors = c("red","yellow","green","violet","orange","blue","pink","cyan")
+Region = CollegeScoreCardData$REGION
+Region.freq = table(Region)
+xregion<-barplot(Region.freq, main="Colleges by Region", xlab= "Region",ylab="# of Colleges", names.arg=c("Service Schools","New England","Mid East","Great Lakes","Plains","Southeast","Southwest","Rocky Mountain","Far West"),las=2,col="green",cex.names = 0.7)
+text(x=xregion, y=Region.freq, label=Region.freq, pos=3, cex=0.8)
+```
+
+
+```{r}
+# We calcuated the number of collges in each locale. The LOcale were City, Rural, Suburb, #and Town. Each locale were further sub-divided by size, and proximity (distant, remote, #fringe)
+locale = CollegeScoreCardData$LOCALE_DESC
+locale.freq = table(locale)
+xlocal<-barplot(locale.freq, main="College Locale",ylab="Locale Count",cex.names=0.7,col="cyan", las=2)
+text(x=xlocal, y=locale.freq, label=locale.freq, pos=3, cex=0.8)
+```
+
+
+
+```{r}
+#To verify whether there is any correlation between In-State Tuition and Out-of-State Tuition for Public Colleges, a subset was created with just Public Colleges, and then In-State Tuition was plotted aganst Out-Of-State Tuition. The plot verifies that there is a correlation. As In-State Tuition increases, Out-Of-State Tuition increases
+
+# create public tuition subset
+PublicTuition<-subset(CollegeScoreCardData, CONTROL == 1)
+
+# Plot in-state tuition against out-of-state tuition for pubic colleges
+plot(as.numeric(as.character(PublicTuition$TUITIONFEE_IN)), as.numeric(as.character(PublicTuition$TUITIONFEE_OUT)), main = "In-State Tuition vs Out-of-State Tuition for Public Colleges", xlab="In-State Tuition", ylab="Out-Of-State Tuition", col=colors)
+
+#Add a regression line
+abline(lm(as.numeric(as.character(PublicTuition$TUITIONFEE_OUT))~as.numeric(as.character(PublicTuition$TUITIONFEE_IN))))
+```
+
+
+```{r}
+#To calculate the Financial Stability Score, we used 4 variables:
+# Percent of students who have defaulted or failed to meet specidied conditions within 2 years (CDR2 & CDR3)
+# Average earnings of students 10 years after graduating ()
+# Median debt of students who completed their degree
+# In-state and out-of-state tuition costs and fees
+# We used the plot function to verify the relationship between the variables
+# Verify the relationship beween tuition and default rate
+tuition = as.numeric(as.character(CollegeScoreCardData$TUITIONFEE_IN))
+default = (as.numeric(as.character(CollegeScoreCardData$CDR2))*100)
+plot(default,tuition, main="Tuition vs Default Rate", xlab="Default Rate [%]", ylab="Tuition [$]", col=colors)
+abline(lm(tuition~default))
+```
+
+
+```{r}
+# verify the relationship between tuition and median mean earnings.
+meanearn = as.numeric(as.character(CollegeScoreCardData$MN_EARN_WNE_P10))
+plot(tuition,meanearn,main="Tuition vs Mean Earnings", xlab="Tuition[$]", ylab="Mean Earnings 10 yrs after grad [$]", col=colors)
+abline(lm(meanearn~tuition))
+```
+
+
+```{r}
+# Histogram of Financial Stability variable - default within 3yrs
+hist((as.numeric(as.character(CollegeScoreCardData$CDR3))*100), main="Histogram of Default within 3yrs", xlab="Default within 3yrs [%]",  col="blue")
+
+```
+
+```{r}
+# Academic Success Variable - First-time Full-time Retention Rate
+hist((as.numeric(as.character(CollegeScoreCardData$RET_FT_COMBINE))*100), main="Histogram of First-time Full-time Retention Rate", xlab="First-Time Full-time Retention Rate [%]",  col="blue")
+```
+
+```{r}
+# Academic Success Variable - First-time Full-time Completion Rate
+hist((as.numeric(as.character(CollegeScoreCardData$C150_COMBINE))*100), main="Histogram of First-time Full-time Completion Rate", xlab="First-Time Full-time Completion Rate [%]",  col="green")
+```
+
+```{r}
+# Academic Success Variable - Withdrawn from Original Institution within 3yrs
+hist((as.numeric(as.character(CollegeScoreCardData$WDRAW_ORIG_YR3_RT))*100), main="Histogram of Withdrwawal from Original Inst within 3 yrs", xlab="Withdrawal from original institution within 3yrs [%]",  col="yellow")
+
+```
+
+```{r}
+# Academic Success Variable - Proportion of Faculty full-time Faculty Staff
+hist((as.numeric(as.character(CollegeScoreCardData$PFTFAC))*100), main="Histogram of Proportion of Full-time Faculty Staff", xlab="Proportion of Full-time Faculty Staff [%]",  col="cyan")
+```
+
